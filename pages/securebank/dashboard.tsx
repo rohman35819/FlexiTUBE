@@ -1,35 +1,60 @@
-import { useEffect } from "react";
+"use client";
+import React, { useState } from "react";
 import { useRouter } from "next/router";
+import Sidebar from "../../components/Sidebar"; // ✅ BENAR
 
-export default function Dashboard() {
+
+const Dashboard: React.FC = () => {
   const router = useRouter();
+  const [collapsed, setCollapsed] = useState(false);
 
-  useEffect(() => {
-    const loggedIn = localStorage.getItem("securebank_logged_in");
-    const otpVerified = localStorage.getItem("securebank_otp_verified");
-    if (!loggedIn || !otpVerified) {
-      router.replace("/securebank/login");
-    }
-  }, [router]);
+  const toggleSidebar = () => setCollapsed((prev) => !prev);
 
-  const handleLogout = () => {
-    localStorage.removeItem("securebank_logged_in");
-    localStorage.removeItem("securebank_otp_verified");
+  const handleClickNote1 = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    router.push("/notes/note1");
+  };
+
+  const handleClickSecureBank = () => {
     router.push("/securebank/login");
   };
 
   return (
-    <div className="min-h-screen flex flex-col justify-center items-center bg-gray-100 px-4">
-      <div className="bg-white p-6 rounded shadow-md w-full max-w-sm text-center">
-        <h1 className="text-2xl font-bold mb-4">Selamat datang di SecureBank Dashboard</h1>
-        <p className="mb-6">Ini adalah halaman dashboard setelah login dan verifikasi OTP sukses.</p>
+    <div>
+      <Sidebar collapsed={collapsed} toggleSidebar={toggleSidebar} />
+      <main
+        style={{
+          marginLeft: collapsed ? "72px" : "240px",
+          padding: "20px",
+          position: "relative",
+          transition: "margin-left 0.3s ease",
+        }}
+      >
         <button
-          onClick={handleLogout}
-          className="w-full bg-red-600 text-white py-2 rounded hover:bg-red-700"
+          onClick={handleClickSecureBank}
+          style={{
+            position: "absolute",
+            top: "20px",
+            right: "20px",
+            padding: "8px 16px",
+            backgroundColor: "#2563EB",
+            color: "white",
+            border: "none",
+            borderRadius: "4px",
+            cursor: "pointer",
+            fontWeight: "bold",
+          }}
         >
-          Logout
+          SecureBank
         </button>
-      </div>
+
+        <h1>Dashboard Content</h1>
+        <p>Konten utama halaman dashboard di sini.</p>
+
+        <button onClick={handleClickNote1}>Klik Aku</button>
+      </main>
     </div>
   );
-}
+};
+
+export default Dashboard;

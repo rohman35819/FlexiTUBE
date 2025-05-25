@@ -1,15 +1,18 @@
 import Link from "next/link";
-import React, { useState } from "react";
+import React from "react";
 import styles from "./Sidebar.module.css";
 
-const Sidebar = () => {
-  const [collapsed, setCollapsed] = useState(false);
+type SidebarProps = {
+  collapsed: boolean;
+  toggleSidebar: () => void;
+};
 
+const Sidebar: React.FC<SidebarProps> = ({ collapsed, toggleSidebar }) => {
   return (
     <div className={`${styles.sidebar} ${collapsed ? styles.collapsed : ""}`}>
       <button
         className={styles.toggleBtn}
-        onClick={() => setCollapsed(!collapsed)}
+        onClick={toggleSidebar}
         aria-label="Toggle Sidebar"
       >
         {collapsed ? "→" : "←"}

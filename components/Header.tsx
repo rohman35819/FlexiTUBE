@@ -1,18 +1,20 @@
+// components/Header.tsx
+import React from "react";
+import Image from "next/image";
 
-export default function Header() {
+const Header = () => {
   return (
-    <header className="header">
-      <input type="text" placeholder="Telusuri" className="search" />
-      <div className="header-right">
-        <button className="icon">➕</button>
-        <div className="icon notification">
-          🔔<span className="badge">9+</span>
-        </div>
-        <img
-          src="https://www.w3schools.com/howto/img_avatar.png"
-          className="avatar"
-        />
-      </div>
+    <header>
+      {/* Contoh penggunaan Image */}
+      <Image
+        src="/logo.png"  // sesuaikan path gambarmu
+        alt="Logo FlexiTUBE"
+        width={120}
+        height={40}
+      />
+      {/* Konten header lainnya */}
     </header>
   );
-}
+};
+
+export default Header;

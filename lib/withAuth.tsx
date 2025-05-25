@@ -1,28 +1,29 @@
+// lib/withAuth.tsx
+import React from "react";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
 
-type AuthMethod = "basic" | "token" | "oauth";
-
-const withAuth = (WrappedComponent: any, authMethod: AuthMethod) => {
-  return (props: any) => {
+const withAuth = (Component: React.ComponentType) => {
+  const AuthenticatedComponent: React.FC = (props) => {
     const router = useRouter();
 
-    useEffect(() => {
-      let loggedIn = false;
-      if (authMethod === "basic") {
-        loggedIn = !!localStorage.getItem("basic_logged_in");
-        if (!loggedIn) router.push("/login-basic");
-      } else if (authMethod === "token") {
-        loggedIn = !!localStorage.getItem("token");
-        if (!loggedIn) router.push("/login-token");
-      } else if (authMethod === "oauth") {
-        loggedIn = !!localStorage.getItem("oauth_logged_in");
-        if (!loggedIn) router.push("/login-oauth");
+    React.useEffect(() => {
+      const loggedIn = localStorage.getItem("loggedIn");
+      if (!loggedIn) {
+        router.push("/login-basic"); // redirect kalau belum login
       }
     }, [router]);
 
-    return <WrappedComponent {...props} />;
+    // Sementara render kosong dulu supaya tidak render komponen sebelum cek login
+    if (typeof window !== "undefined" && !localStorage.getItem("loggedIn")) {
+      return null;
+    }
+
+    return <Component {...props} />;
   };
+
+  AuthenticatedComponent.displayName = `withAuth(${Component.displayName || Component.name || "Component"})`;
+
+  return AuthenticatedComponent;
 };
 
 export default withAuth;

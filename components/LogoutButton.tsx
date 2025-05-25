@@ -1,11 +1,20 @@
 import { useRouter } from "next/router";
 
-export default function LogoutButton() {
+type LogoutButtonProps = {
+  authMethod?: string;
+};
+
+export default function LogoutButton({ authMethod }: LogoutButtonProps) {
   const router = useRouter();
 
   const handleLogout = () => {
-    localStorage.removeItem("loggedIn");  // hapus status login
-    router.push("/login-basic");           // redirect ke halaman login
+    localStorage.removeItem("loggedIn");
+
+    if (authMethod === "basic") {
+      router.push("/login-basic");
+    } else {
+      router.push("/login");
+    }
   };
 
   return (
