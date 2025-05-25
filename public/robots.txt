@@ -1,0 +1,9 @@
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: https://flexitube.netlify.app
+
+# Sitemaps
+Sitemap: https://flexitube.netlify.app/sitemap.xml
