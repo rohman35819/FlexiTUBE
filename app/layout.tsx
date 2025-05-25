@@ -5,7 +5,7 @@ export const metadata = {
   title: 'FlexiTUBE',
   description: 'Platform FlexiTUBE',
   verification: {
-    google: 'ABC123...xyz', // Ganti dengan kode verifikasi asli kamu
+    google: 'google6d835a241361b1dd', // Ganti dengan kode verifikasi asli kamu
   },
 }
 
@@ -14,7 +14,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en">
       <head>
         {/* Meta verifikasi Google */}
-        <meta name="google-site-verification" content="ABC123...xyz" />
+        <meta name="google-site-verification" content="google6d835a241361b1dd" />
       </head>
       <body>
         {children}
