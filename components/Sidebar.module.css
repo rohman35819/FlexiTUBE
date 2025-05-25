@@ -1,0 +1,62 @@
+.sidebar {
+  width: 240px;
+  background-color: #202020;
+  color: white;
+  height: 100vh;
+  transition: width 0.3s ease;
+  overflow: hidden;
+  position: fixed;
+  top: 0;
+  left: 0;
+  padding-top: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.collapsed {
+  width: 60px;
+}
+
+.toggleBtn {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 20px;
+  padding: 10px 15px;
+  cursor: pointer;
+  align-self: flex-end;
+  user-select: none;
+}
+
+.nav ul {
+  list-style: none;
+  padding: 0;
+  margin-top: 40px;
+}
+
+.nav li {
+  padding: 12px 20px;
+  white-space: nowrap;
+  transition: background-color 0.2s ease;
+}
+
+.nav li:hover {
+  background-color: #383838;
+}
+
+.nav a {
+  color: white;
+  text-decoration: none;
+  display: block;
+}
+
+/* Saat sidebar collapse, sembunyikan teks link */
+.collapsed .nav li a {
+  text-indent: -9999px;
+  overflow: hidden;
+  display: block;
+  position: relative;
+  height: 20px; /* tinggi tulisan */
+}
+
+/* Bisa tambahkan icon atau tooltip kalau mau */

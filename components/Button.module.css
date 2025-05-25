@@ -1,0 +1,15 @@
+.btn {
+  background-color: #3b82f6; /* warna biru */
+  color: white;
+  padding: 10px 18px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background-color 0.3s ease;
+  user-select: none;
+}
+
+.btn:hover {
+  background-color: #2563eb; /* biru lebih gelap saat hover */
+}

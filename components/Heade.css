@@ -1,0 +1,52 @@
+
+.header {
+  position: sticky;
+  top: 0;
+  background-color: #0f0f0f;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  height: 56px;
+  z-index: 999;
+}
+
+.search {
+  background-color: #212121;
+  border: none;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 2px;
+  width: 100%;
+  max-width: 600px;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.icon {
+  font-size: 20px;
+  position: relative;
+  color: white;
+}
+
+.notification .badge {
+  position: absolute;
+  top: -6px;
+  right: -10px;
+  background: red;
+  font-size: 10px;
+  padding: 2px 4px;
+  border-radius: 999px;
+  color: white;
+}
+
+.avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+}
