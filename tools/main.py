@@ -1,4 +1,4 @@
-from cek_links import cek_links
+from cek_link import cek_links
 from cek_cookie import cek_cookie
 
 def tampilkan_menu():
