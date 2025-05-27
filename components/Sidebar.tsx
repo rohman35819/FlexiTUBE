@@ -24,7 +24,7 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed, toggleSidebar }) => {
             <Link href="/notes/note1">Notes 1</Link>
           </li>
           <li>
-            <Link href="/notes/note2">Notes 2</Link>
+            <Link href="/admin">Admin</Link>
           </li>
           <li>
             <Link href="/notes/note3">Notes 3</Link>
