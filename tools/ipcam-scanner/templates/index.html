@@ -1,31 +1,38 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>IP Camera Scanner 1km</title>
+    <title>IP Camera Scanner</title>
 </head>
 <body>
-  <h1>IP Camera Scanner Jarak 1 km</h1>
-  <form method="post">
-    <label>Masukkan IP target (satu per baris):</label><br>
-    <textarea name="ips" rows="15" cols="50" placeholder="192.168.1.10&#10;203.0.113.25"></textarea><br>
-    <button type="submit">Scan</button>
-  </form>
+    <h1>IP Camera Scanner 1km</h1>
+    <form method="post">
+        <label>Masukkan IP target (satu per baris):</label><br>
+        <textarea name="ips" rows="8" cols="40" placeholder="192.168.1.10&#10;203.0.113.25"></textarea><br><br>
+        <input type="submit" value="Scan">
+    </form>
 
-  {% if results %}
+    {% if results %}
     <h2>Hasil Scan</h2>
-    <ul>
-    {% for r in results %}
-      <li>
-        <strong>{{ r.ip }}</strong> - Port 80: {{ "Terbuka" if r.open else "Tertutup" }}<br>
-        {% if r.paths %}
-          Path ditemukan: {{ r.paths|join(", ") }}<br>
-        {% endif %}
-        {% if r.login %}
-          Login default berhasil: <b>{{ r.login }}</b>
-        {% endif %}
-      </li>
-    {% endfor %}
-    </ul>
-  {% endif %}
+    <table border="1" cellpadding="5" cellspacing="0">
+        <tr>
+            <th>IP Address</th>
+            <th>Port 80</th>
+            <th>Streaming</th>
+        </tr>
+        {% for res in results %}
+        <tr>
+            <td>{{ res.ip }}</td>
+            <td>{{ 'Terbuka' if res.port_80 else 'Tertutup' }}</td>
+            <td>
+                {% if res.port_80 %}
+                <a href="/stream?ip={{ res.ip }}" target="_blank">Lihat Kamera</a>
+                {% else %}
+                -
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% endif %}
 </body>
 </html>

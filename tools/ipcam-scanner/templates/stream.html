@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Streaming Kamera IP {{ ip }}</title>
+</head>
+<body>
+    <h1>Streaming Kamera IP: {{ ip }}</h1>
+    <p>Jika video tidak muncul, pastikan URL streaming benar dan kamera tidak memerlukan autentikasi tambahan.</p>
+    <iframe src="{{ stream_url }}" width="640" height="480" frameborder="0" allowfullscreen></iframe><br><br>
+    <a href="/">Kembali ke Scan</a>
+</body>
+</html>
