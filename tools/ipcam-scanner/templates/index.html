@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>IP Camera Scanner 1km</title>
+</head>
+<body>
+  <h1>IP Camera Scanner Jarak 1 km</h1>
+  <form method="post">
+    <label>Masukkan IP target (satu per baris):</label><br>
+    <textarea name="ips" rows="15" cols="50" placeholder="192.168.1.10&#10;203.0.113.25"></textarea><br>
+    <button type="submit">Scan</button>
+  </form>
+
+  {% if results %}
+    <h2>Hasil Scan</h2>
+    <ul>
+    {% for r in results %}
+      <li>
+        <strong>{{ r.ip }}</strong> - Port 80: {{ "Terbuka" if r.open else "Tertutup" }}<br>
+        {% if r.paths %}
+          Path ditemukan: {{ r.paths|join(", ") }}<br>
+        {% endif %}
+        {% if r.login %}
+          Login default berhasil: <b>{{ r.login }}</b>
+        {% endif %}
+      </li>
+    {% endfor %}
+    </ul>
+  {% endif %}
+</body>
+</html>
