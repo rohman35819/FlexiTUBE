@@ -49,4 +49,5 @@ def stream():
     return render_template('stream.html', stream_url=stream_url, ip=ip)
 
 if __name__ == '__main__':
-    app.run(debug=True, port=5000)
+    # Jalankan Flask di semua IP (0.0.0.0) supaya bisa diakses dari jaringan lokal, port 5000
+    app.run(debug=True, host='0.0.0.0', port=5000)
