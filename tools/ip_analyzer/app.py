@@ -141,5 +141,7 @@ def handle_start_scan(data):
     socketio.start_background_task(background_task)
 
 # ------------------------------------------
-if __name__ == '__main__':
-    socketio.run(app, host='0.0.0.0', port=5000, debug=True)
+if __name__ == "__main__":
+    from eventlet import wsgi
+    import eventlet
+    wsgi.server(eventlet.listen(("0.0.0.0", 5000)), app)
