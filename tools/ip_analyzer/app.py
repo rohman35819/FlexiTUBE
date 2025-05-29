@@ -1,6 +1,3 @@
-import eventlet
-eventlet.monkey_patch()  # Harus di paling atas sebelum import lain
-
 import asyncio
 import ipaddress
 import platform
@@ -8,14 +5,11 @@ import subprocess
 from flask import Flask, render_template, request, jsonify
 from flask_socketio import SocketIO, emit
 import requests
-import aiohttp
 import netifaces
 
-# Inisialisasi Flask dan SocketIO
 app = Flask(__name__)
-socketio = SocketIO(app, async_mode='eventlet')
+socketio = SocketIO(app, async_mode='asyncio')
 
-# ------------------------------------------
 def get_local_subnet():
     try:
         for iface in netifaces.interfaces():
@@ -31,7 +25,6 @@ def get_local_subnet():
         pass
     return "192.168.1.0/24"
 
-# ------------------------------------------
 async def async_ping(ip: str) -> bool:
     param = '-n' if platform.system().lower() == 'windows' else '-c'
     timeout_param = ['-w', '1000'] if platform.system().lower() == 'windows' else ['-W', '1']
@@ -45,7 +38,6 @@ async def async_ping(ip: str) -> bool:
     retcode = await proc.wait()
     return retcode == 0
 
-# ------------------------------------------
 async def scan_subnet(subnet, sid):
     net = ipaddress.ip_network(subnet, strict=False)
     hosts = list(net.hosts())
@@ -56,24 +48,21 @@ async def scan_subnet(subnet, sid):
     async def sem_ping(ip):
         async with semaphore:
             is_alive = await async_ping(ip)
-            socketio.emit('scan_progress', {
-                'current': hosts.index(ip)+1,
+            await socketio.emit('scan_progress', {
+                'current': hosts.index(ip) + 1,
                 'total': total,
-                'ip': ip,
+                'ip': str(ip),
                 'alive': is_alive
             }, to=sid)
-            return ip if is_alive else None
+            return str(ip) if is_alive else None
 
-    tasks = [sem_ping(str(ip)) for ip in hosts]
+    tasks = [sem_ping(ip) for ip in hosts]
     results = await asyncio.gather(*tasks)
-    for r in results:
-        if r:
-            active_ips.append(r)
+    active_ips = [ip for ip in results if ip]
 
-    socketio.emit('scan_done', {'active_ips': active_ips}, to=sid)
+    await socketio.emit('scan_done', {'active_ips': active_ips}, to=sid)
     return active_ips
 
-# ------------------------------------------
 def analyze_ip(ip):
     url = f"http://ip-api.com/json/{ip}"
     try:
@@ -87,7 +76,6 @@ def analyze_ip(ip):
     except Exception as e:
         return {'error': str(e)}
 
-# ------------------------------------------
 def check_port(ip, port, timeout=1):
     import socket
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -99,13 +87,11 @@ def check_port(ip, port, timeout=1):
     except:
         return False
 
-# ------------------------------------------
 @app.route('/')
 def index():
     subnet = get_local_subnet()
     return render_template('index.html', local_subnet=subnet)
 
-# ------------------------------------------
 @app.route('/api/analyze', methods=['POST'])
 def api_analyze():
     data = request.json
@@ -115,7 +101,6 @@ def api_analyze():
     result = analyze_ip(ip)
     return jsonify(result)
 
-# ------------------------------------------
 @app.route('/api/check_port', methods=['POST'])
 def api_check_port():
     data = request.json
@@ -126,22 +111,14 @@ def api_check_port():
     status = check_port(ip, port)
     return jsonify({'ip': ip, 'port': port, 'open': status})
 
-# ------------------------------------------
 @socketio.on('start_scan')
-def handle_start_scan(data):
+async def handle_start_scan(data):
     subnet = data.get('subnet')
     sid = request.sid
     if not subnet:
-        emit('scan_error', {'error': 'Subnet harus diisi'}, to=sid)
+        await emit('scan_error', {'error': 'Subnet harus diisi'}, to=sid)
         return
-    # Gunakan thread eventlet agar non-blocking
-    def background_task():
-        asyncio.set_event_loop(asyncio.new_event_loop())
-        asyncio.get_event_loop().run_until_complete(scan_subnet(subnet, sid))
-    socketio.start_background_task(background_task)
+    await scan_subnet(subnet, sid)
 
-# ------------------------------------------
 if __name__ == "__main__":
-    from eventlet import wsgi
-    import eventlet
-    wsgi.server(eventlet.listen(("0.0.0.0", 5000)), app)
+    socketio.run(app, host='0.0.0.0', port=5000)
