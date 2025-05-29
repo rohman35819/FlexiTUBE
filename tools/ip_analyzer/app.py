@@ -1,3 +1,6 @@
+import eventlet
+eventlet.monkey_patch()  # Harus di paling atas sebelum import lain
+
 import asyncio
 import ipaddress
 import platform
@@ -8,24 +11,11 @@ import requests
 import aiohttp
 import netifaces
 
-# Inisialisasi Flask dan SocketIO (eventlet async server)
+# Inisialisasi Flask dan SocketIO
 app = Flask(__name__)
-# Deteksi async_mode terbaik
-try:
-    import eventlet
-    async_mode = 'eventlet'
-except ImportError:
-    try:
-        import gevent
-        async_mode = 'gevent'
-    except ImportError:
-        async_mode = 'threading'
-
-socketio = SocketIO(app, async_mode=async_mode)
-
+socketio = SocketIO(app, async_mode='eventlet')
 
 # ------------------------------------------
-# Fungsi mendapatkan subnet lokal otomatis
 def get_local_subnet():
     try:
         for iface in netifaces.interfaces():
@@ -34,7 +24,6 @@ def get_local_subnet():
                 for link in addrs[netifaces.AF_INET]:
                     ip = link.get('addr')
                     netmask = link.get('netmask')
-                    # Lewati localhost dan IP tanpa netmask valid
                     if ip and netmask and not ip.startswith('127.'):
                         network = ipaddress.IPv4Network(f"{ip}/{netmask}", strict=False)
                         return str(network)
@@ -43,14 +32,11 @@ def get_local_subnet():
     return "192.168.1.0/24"
 
 # ------------------------------------------
-# Fungsi async ping dengan subprocess cross-platform
 async def async_ping(ip: str) -> bool:
     param = '-n' if platform.system().lower() == 'windows' else '-c'
-    # Timeout 1 detik (Windows pakai -w 1000, Linux -W 1)
     timeout_param = ['-w', '1000'] if platform.system().lower() == 'windows' else ['-W', '1']
     cmd = ['ping', param, '1'] + timeout_param + [ip]
 
-    # Jalankan subprocess ping secara async
     proc = await asyncio.create_subprocess_exec(
         *cmd,
         stdout=subprocess.DEVNULL,
@@ -60,20 +46,16 @@ async def async_ping(ip: str) -> bool:
     return retcode == 0
 
 # ------------------------------------------
-# Async function untuk scan subnet dengan concurrency tinggi dan progress update via socketio
 async def scan_subnet(subnet, sid):
     net = ipaddress.ip_network(subnet, strict=False)
     hosts = list(net.hosts())
     total = len(hosts)
     active_ips = []
-
-    # Batasi concurrency untuk jaga resource
     semaphore = asyncio.Semaphore(100)
 
     async def sem_ping(ip):
         async with semaphore:
             is_alive = await async_ping(ip)
-            # Kirim update progress ke client via socketio
             socketio.emit('scan_progress', {
                 'current': hosts.index(ip)+1,
                 'total': total,
@@ -88,12 +70,10 @@ async def scan_subnet(subnet, sid):
         if r:
             active_ips.append(r)
 
-    # Kirim hasil akhir
     socketio.emit('scan_done', {'active_ips': active_ips}, to=sid)
     return active_ips
 
 # ------------------------------------------
-# API ip-api.com untuk analisis IP
 def analyze_ip(ip):
     url = f"http://ip-api.com/json/{ip}"
     try:
@@ -108,7 +88,6 @@ def analyze_ip(ip):
         return {'error': str(e)}
 
 # ------------------------------------------
-# API untuk cek port TCP sederhana dengan socket
 def check_port(ip, port, timeout=1):
     import socket
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -121,14 +100,12 @@ def check_port(ip, port, timeout=1):
         return False
 
 # ------------------------------------------
-# Route index, kirim halaman utama dengan subnet otomatis
 @app.route('/')
 def index():
     subnet = get_local_subnet()
     return render_template('index.html', local_subnet=subnet)
 
 # ------------------------------------------
-# Endpoint POST untuk analisis IP
 @app.route('/api/analyze', methods=['POST'])
 def api_analyze():
     data = request.json
@@ -139,7 +116,6 @@ def api_analyze():
     return jsonify(result)
 
 # ------------------------------------------
-# Endpoint POST untuk cek port
 @app.route('/api/check_port', methods=['POST'])
 def api_check_port():
     data = request.json
@@ -151,7 +127,6 @@ def api_check_port():
     return jsonify({'ip': ip, 'port': port, 'open': status})
 
 # ------------------------------------------
-# SocketIO event: scan subnet
 @socketio.on('start_scan')
 def handle_start_scan(data):
     subnet = data.get('subnet')
@@ -159,10 +134,12 @@ def handle_start_scan(data):
     if not subnet:
         emit('scan_error', {'error': 'Subnet harus diisi'}, to=sid)
         return
-    # Jalankan scan async, tapi harus dari thread yang mendukung asyncio
-    asyncio.run(scan_subnet(subnet, sid))
+    # Gunakan thread eventlet agar non-blocking
+    def background_task():
+        asyncio.set_event_loop(asyncio.new_event_loop())
+        asyncio.get_event_loop().run_until_complete(scan_subnet(subnet, sid))
+    socketio.start_background_task(background_task)
 
 # ------------------------------------------
 if __name__ == '__main__':
-    # Jalankan dengan eventlet supaya socketio bisa jalan
     socketio.run(app, host='0.0.0.0', port=5000, debug=True)
