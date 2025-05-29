@@ -10,7 +10,19 @@ import netifaces
 
 # Inisialisasi Flask dan SocketIO (eventlet async server)
 app = Flask(__name__)
-socketio = SocketIO(app, async_mode='eventlet')
+# Deteksi async_mode terbaik
+try:
+    import eventlet
+    async_mode = 'eventlet'
+except ImportError:
+    try:
+        import gevent
+        async_mode = 'gevent'
+    except ImportError:
+        async_mode = 'threading'
+
+socketio = SocketIO(app, async_mode=async_mode)
+
 
 # ------------------------------------------
 # Fungsi mendapatkan subnet lokal otomatis
