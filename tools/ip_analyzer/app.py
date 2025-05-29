@@ -1,5 +1,10 @@
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, jsonify
 import requests
+import subprocess
+import ipaddress
+import platform
+import threading
+import queue
 
 app = Flask(__name__)
 
@@ -31,6 +36,44 @@ def analyze_ip(ip):
     except Exception as e:
         return {"error": f"Gagal mengambil data IP: {str(e)}"}
 
+def ping_ip(ip):
+    param = '-n' if platform.system().lower() == 'windows' else '-c'
+    command = ['ping', param, '1', '-w', '1000', ip]
+    try:
+        result = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        return result.returncode == 0
+    except:
+        return False
+
+def scan_subnet(subnet):
+    try:
+        net = ipaddress.ip_network(subnet, strict=False)
+    except ValueError:
+        return []
+
+    q = queue.Queue()
+    for ip in net.hosts():
+        q.put(str(ip))
+
+    active_ips = []
+
+    def worker():
+        while not q.empty():
+            ip = q.get()
+            if ping_ip(ip):
+                active_ips.append(ip)
+            q.task_done()
+
+    threads = []
+    for _ in range(30):
+        t = threading.Thread(target=worker)
+        t.daemon = True
+        t.start()
+        threads.append(t)
+
+    q.join()
+    return active_ips
+
 @app.route('/', methods=['GET', 'POST'])
 def index():
     result = None
@@ -41,6 +84,14 @@ def index():
             result = analyze_ip(ip)
     return render_template('index.html', result=result, ip=ip)
 
+@app.route('/scan', methods=['POST'])
+def scan():
+    data = request.get_json()
+    subnet = data.get('subnet')
+    if not subnet:
+        return jsonify({'error': 'Subnet harus diisi'}), 400
+    active_ips = scan_subnet(subnet)
+    return jsonify({'active_ips': active_ips})
+
 if __name__ == '__main__':
-    # Jalankan dengan host 0.0.0.0 supaya bisa diakses dari luar jika perlu
-    app.run(host='0.0.0.0', port=5000)
+    app.run(host='0.0.0.0', port=5000, debug=True)
