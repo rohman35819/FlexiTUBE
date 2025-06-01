@@ -1,7 +1,7 @@
 import socket
 
 # Ganti IP sesuai yang kamu temukan aktif tadi
-TARGET_IP = "192.168.124.83"
+TARGET_IP = "192.168.124.93"
 # Port umum: web, ssh, rtsp, kamera, dll
 PORTS = [22, 23, 80, 443, 554, 8080, 8888]
 
