@@ -92,11 +92,14 @@ def mainMenu():
 
     while True:
         os.system('cls' if os.name == 'nt' else 'clear')
-        print(" _ _ ___ ___ _ __ __ ")
-        print("| \\| |___/ __|/ _ \\| | | \\/ |__ _ _ __ ")
-        print("| . / _ \\__ \\ (_) | |__| |\\/| / _ \\| '_ \\")
-        print("|_|\\_\\___/___/\\__\\_\\____|_| |_\\__,_| .__/")
-        print(" v0.7 codingo@protonmail.com |_| ")
+       
+        print("_   _   _   _   _  ")
+        print(" / \ / \ / \ / \ / \ ")
+        print ( A | X | I | O | N )
+        print( " \_/ \_/ \_/ \_/ \_/ ")
+
+        print(" FlexiTUBE|_| ")
+
         print("\n")
         print("1-Set options")
         print("2-NoSQL DB Access Attacks")
