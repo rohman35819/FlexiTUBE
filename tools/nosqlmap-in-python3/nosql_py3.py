@@ -95,7 +95,7 @@ def mainMenu():
        
         print("_   _   _   _   _  ")
         print(" / \ / \ / \ / \ / \ ")
-        print ( A | X | I | O | N )
+        print (" A | X | I | O | N ")
         print( " \_/ \_/ \_/ \_/ \_/ ")
 
         print(" FlexiTUBE|_| ")
