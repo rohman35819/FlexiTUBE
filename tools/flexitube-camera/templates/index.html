@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>FlexiTube - Viewer Kamera RTSP</title>
+</head>
+<body>
+    <h2>Masukkan IP Kamera RTSP</h2>
+    <form method="POST">
+        <label>IP Kamera:</label><br>
+        <input type="text" name="ip" placeholder="contoh: 123.45.67.89" required><br><br>
+        
+        <label>Port (default 554):</label><br>
+        <input type="text" name="port" placeholder="554"><br><br>
+        
+        <label>Path Stream (default stream):</label><br>
+        <input type="text" name="path" placeholder="stream"><br><br>
+        
+        <button type="submit">Tonton Kamera</button>
+    </form>
+
+    {% if rtsp_url %}
+    <h3>Streaming dari: <a href="#" id="rtspLink">{{ rtsp_url }}</a></h3>
+
+    <button onclick="copyToClipboard()">Copy Link RTSP</button>
+
+    <p><strong>Catatan:</strong> Browser tidak bisa langsung mainkan RTSP.
+    <br>Copy URL di atas dan buka dengan VLC atau aplikasi player RTSP.</p>
+
+    <script>
+    function copyToClipboard() {
+        const rtspUrl = document.getElementById('rtspLink').textContent;
+        navigator.clipboard.writeText(rtspUrl).then(() => {
+            alert('URL RTSP berhasil disalin ke clipboard!');
+        }, () => {
+            alert('Gagal menyalin URL.');
+        });
+    }
+    </script>
+    {% endif %}
+
+    <hr>
+    <h3>Situs Penting untuk Pemantauan dan Penemuan Kamera</h3>
+    <ul>
+        <li><a href="https://www.shodan.io/" target="_blank" rel="noopener noreferrer">Shodan</a></li>
+        <li><a href="https://censys.io/" target="_blank" rel="noopener noreferrer">Censys</a></li>
+        <li><a href="https://www.zoomeye.org/" target="_blank" rel="noopener noreferrer">ZoomEye</a></li>
+        <li><a href="https://www.binaryedge.io/" target="_blank" rel="noopener noreferrer">BinaryEdge</a></li>
+        <li><a href="https://ivre.rocks/" target="_blank" rel="noopener noreferrer">IVRE</a></li>
+    </ul>
+</body>
+</html>
