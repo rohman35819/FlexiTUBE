@@ -3,7 +3,7 @@ import requests
 
 app = Flask(__name__)
 
-ZOMEYE_API_KEY = "API_KEY_KAMU_DISINI"  # Masukkan API key Zomeye kamu di sini
+ZOMEYE_API_KEY = "9851067F-D1c1-A0a92-211d-66315985205"  # Masukkan API key Zomeye kamu di sini
 
 def search_zomeye(query):
     url = "https://api.zomeye.org/web/search"
