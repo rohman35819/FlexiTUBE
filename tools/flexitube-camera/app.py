@@ -4,24 +4,20 @@ import requests
 app = Flask(__name__)
 
 ZOMEYE_API_KEY = "9851067F-D1c1-A0a92-211d-66315985205"  # Masukkan API key Zomeye kamu di sini
-
 def search_zomeye(query):
-    url = "https://api.zoomeye.org/host/search"
-
+    url = "https://api.zoomeye.ai/host/search"
     headers = {
         "API-Key": ZOMEYE_API_KEY,
         "Content-Type": "application/json"
     }
     payload = {
         "query": query,
-        "page": 1,
-        "size": 10
+        "page": 1
     }
     try:
         response = requests.post(url, json=payload, headers=headers, timeout=10)
         response.raise_for_status()
         data = response.json()
-        # Ambil IP dari hasil (asumsi format data sesuai dokumentasi Zomeye)
         ips = []
         for item in data.get("matches", []):
             ip = item.get("ip")
@@ -29,8 +25,9 @@ def search_zomeye(query):
                 ips.append(ip)
         return ips
     except Exception as e:
-        print(f"Gagal panggil API Zomeye: {e}")
+        print(f"Gagal panggil API ZoomEye: {e}")
         return []
+
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
