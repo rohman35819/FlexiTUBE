@@ -8,15 +8,20 @@
     <h2>Masukkan IP Kamera RTSP</h2>
     <form method="POST">
         <label>IP Kamera:</label><br>
-        <input type="text" name="ip" placeholder="contoh: 123.45.67.89" required><br><br>
+        <input type="text" name="ip" placeholder="contoh: 123.45.67.89"><br><br>
         
         <label>Port (default 554):</label><br>
         <input type="text" name="port" placeholder="554"><br><br>
         
         <label>Path Stream (default stream):</label><br>
         <input type="text" name="path" placeholder="stream"><br><br>
-        
-        <button type="submit">Tonton Kamera</button>
+
+        <hr>
+        <h3>Atau Cari IP Kamera dengan ZoomEye</h3>
+        <label>Masukkan Query ZoomEye:</label><br>
+        <input type="text" name="zomeye_query" placeholder="Contoh: title:camera port:554"><br><br>
+
+        <button type="submit">Submit</button>
     </form>
 
     {% if rtsp_url %}
@@ -37,6 +42,16 @@
         });
     }
     </script>
+    {% endif %}
+
+    {% if zomeye_results %}
+    <hr>
+    <h3>Hasil Pencarian ZoomEye:</h3>
+    <ul>
+        {% for ip in zomeye_results %}
+        <li>{{ ip }}</li>
+        {% endfor %}
+    </ul>
     {% endif %}
 
     <hr>
