@@ -1,29 +1,27 @@
 // lib/withAuth.tsx
-import React from "react";
-import { useRouter } from "next/router";
+'use client';
 
-const withAuth = (Component: React.ComponentType) => {
-  const AuthenticatedComponent: React.FC = (props) => {
-    const router = useRouter();
+import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
-    React.useEffect(() => {
-      const loggedIn = localStorage.getItem("loggedIn");
-      if (!loggedIn) {
-        router.push("/login-basic"); // redirect kalau belum login
-      }
-    }, [router]);
+export default function WithAuth({ children }: { children: React.ReactNode }) {
+  const router = useRouter();
+  const [isClient, setIsClient] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-    // Sementara render kosong dulu supaya tidak render komponen sebelum cek login
-    if (typeof window !== "undefined" && !localStorage.getItem("loggedIn")) {
-      return null;
+  useEffect(() => {
+    setIsClient(true);
+    const loggedIn = localStorage.getItem('loggedIn');
+    if (!loggedIn) {
+      router.push('/login-basic');
+    } else {
+      setIsAuthenticated(true);
     }
+  }, [router]);
 
-    return <Component {...props} />;
-  };
+  if (!isClient || !isAuthenticated) {
+    return null;
+  }
 
-  AuthenticatedComponent.displayName = `withAuth(${Component.displayName || Component.name || "Component"})`;
-
-  return AuthenticatedComponent;
-};
-
-export default withAuth;
+  return <>{children}</>;
+}

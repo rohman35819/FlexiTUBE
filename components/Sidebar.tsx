@@ -21,13 +21,16 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed, toggleSidebar }) => {
       <nav className={styles.nav}>
         <ul>
           <li>
-            <Link href="/notes/note1">Notes 1</Link>
+            <Link href="/notes1">Notes 1</Link>
           </li>
           <li>
-            <Link href="/admin">Admin</Link>
+            <Link href="/Admin">Admin</Link>
           </li>
           <li>
             <Link href="/notes/note3">Notes 3</Link>
+          </li>
+          <li>
+            <Link href="/inisidebar1">sidebar 1</Link>
           </li>
         </ul>
       </nav>
