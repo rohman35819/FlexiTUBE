@@ -5,17 +5,13 @@ import Sidebar from '../../components/Sidebar';
 import DashboardButtons from '../../components/DashboardButtons';
 import LayoutWrapper from '../../components/LayoutWrapper';
 import FilterBar from '../../components/FilterBar';
-import DataTable from '../../components/DataTable';
+import DataTable from '../../components/DataTable'; // Versi khusus: id, name, status
 import ChartSection from '../../components/ChartSection';
 import Notification from '../../components/Notification';
 import Modal from '../../components/Modal';
+import { Item } from '@/lib/types';
 
-type Item = {
-  id: number;
-  name: string;
-  status: string;
-  description: string;
-};
+
 
 const sampleData: Item[] = [
   { id: 1, name: 'Device A', status: 'Active', description: 'Detail Device A ...' },
@@ -63,7 +59,7 @@ const Dashboard: React.FC = () => {
           Trigger Notifikasi
         </button>
 
-        {/* Data Table */}
+        {/* Tabel Data */}
         <DataTable data={sampleData} search={search} onRowClick={handleRowClick} />
 
         {/* Grafik */}

@@ -1,6 +1,7 @@
+// components/DataTable.tsx
 import React, { useState, useMemo } from "react";
+import { Item } from '@/lib/types';
 
-type Item = { id: number; name: string; status: string };
 
 type DataTableProps = {
   data: Item[];
@@ -16,8 +17,12 @@ const DataTable: React.FC<DataTableProps> = ({ data, search, onRowClick }) => {
 
   const filteredSorted = useMemo(() => {
     return data
-      .filter((item) => item.name.toLowerCase().includes(search.toLowerCase()))
-      .sort((a, b) => (sortAsc ? a.name.localeCompare(b.name) : b.name.localeCompare(a.name)));
+      .filter((item) =>
+        item.name.toLowerCase().includes(search.toLowerCase())
+      )
+      .sort((a, b) =>
+        sortAsc ? a.name.localeCompare(b.name) : b.name.localeCompare(a.name)
+      );
   }, [data, search, sortAsc]);
 
   const pageCount = Math.ceil(filteredSorted.length / PAGE_SIZE);
@@ -35,9 +40,9 @@ const DataTable: React.FC<DataTableProps> = ({ data, search, onRowClick }) => {
       <table className="min-w-full border-collapse border border-gray-300">
         <thead>
           <tr>
-            <th className="border border-gray-300 px-4 py-2">ID</th>
-            <th className="border border-gray-300 px-4 py-2">Nama</th>
-            <th className="border border-gray-300 px-4 py-2">Status</th>
+            <th className="border px-4 py-2">ID</th>
+            <th className="border px-4 py-2">Nama</th>
+            <th className="border px-4 py-2">Status</th>
           </tr>
         </thead>
         <tbody>
@@ -47,18 +52,11 @@ const DataTable: React.FC<DataTableProps> = ({ data, search, onRowClick }) => {
               className="hover:bg-gray-100 cursor-pointer"
               onClick={() => onRowClick && onRowClick(item)}
             >
-              <td className="border border-gray-300 px-4 py-2">{item.id}</td>
-              <td className="border border-gray-300 px-4 py-2">{item.name}</td>
-              <td className="border border-gray-300 px-4 py-2">{item.status}</td>
+              <td className="border px-4 py-2">{item.id}</td>
+              <td className="border px-4 py-2">{item.name}</td>
+              <td className="border px-4 py-2">{item.status}</td>
             </tr>
           ))}
-          {pagedData.length === 0 && (
-            <tr>
-              <td colSpan={3} className="text-center p-4">
-                Tidak ada data ditemukan
-              </td>
-            </tr>
-          )}
         </tbody>
       </table>
 
@@ -70,7 +68,7 @@ const DataTable: React.FC<DataTableProps> = ({ data, search, onRowClick }) => {
         >
           Prev
         </button>
-        <span className="px-3 py-1">{page} / {pageCount}</span>
+        <span>{page} / {pageCount}</span>
         <button
           disabled={page === pageCount}
           onClick={() => setPage(page + 1)}
