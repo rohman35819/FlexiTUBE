@@ -1,85 +1,90 @@
 'use client';
 
-import { useRouter } from 'next/navigation'; // untuk app router, gunakan next/navigation, bukan next/router
 import React, { useState } from 'react';
 import Sidebar from '../../components/Sidebar';
-import { FaBug } from 'react-icons/fa';
+import DashboardButtons from '../../components/DashboardButtons';
+import LayoutWrapper from '../../components/LayoutWrapper';
+import FilterBar from '../../components/FilterBar';
+import DataTable from '../../components/DataTable';
+import ChartSection from '../../components/ChartSection';
+import Notification from '../../components/Notification';
+import Modal from '../../components/Modal';
+
+type Item = {
+  id: number;
+  name: string;
+  status: string;
+  description: string;
+};
+
+const sampleData: Item[] = [
+  { id: 1, name: 'Device A', status: 'Active', description: 'Detail Device A ...' },
+  { id: 2, name: 'Device B', status: 'Inactive', description: 'Detail Device B ...' },
+  { id: 3, name: 'Device C', status: 'Active', description: 'Detail Device C ...' },
+  { id: 4, name: 'Device D', status: 'Maintenance', description: 'Detail Device D ...' },
+  { id: 5, name: 'Device E', status: 'Inactive', description: 'Detail Device E ...' },
+  { id: 6, name: 'Device F', status: 'Active', description: 'Detail Device F ...' },
+  { id: 7, name: 'Device G', status: 'Active', description: 'Detail Device G ...' },
+];
 
 const Dashboard: React.FC = () => {
-  const router = useRouter();
   const [collapsed, setCollapsed] = useState(false);
-
   const toggleSidebar = () => setCollapsed(!collapsed);
 
-  const handleClickNote1 = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    router.push("/notes/note1");
+  const [search, setSearch] = useState('');
+  const [notification, setNotification] = useState<string | null>(null);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [selectedItem, setSelectedItem] = useState<Item | null>(null);
+
+  const handleRowClick = (item: Item) => {
+    setSelectedItem(item);
+    setModalOpen(true);
   };
 
-  const handleClickSecureBank = () => {
-    router.push("/securebank/login");
-  };
-
-  const handleClickFlexiCrack = () => {
-    router.push("/flexicrack"); // sesuaikan path FlexiCrack kamu
+  const triggerNotification = () => {
+    setNotification('Data berhasil diperbarui!');
   };
 
   return (
-    <div>
+    <div className="flex min-h-screen">
       <Sidebar collapsed={collapsed} toggleSidebar={toggleSidebar} />
-      <main
-        style={{
-          marginLeft: collapsed ? "72px" : "240px",
-          padding: "20px",
-          position: "relative",
-          transition: "margin-left 0.3s ease",
-        }}
-      >
+
+      <LayoutWrapper collapsed={collapsed}>
+        <DashboardButtons />
+
+        {/* Filter & Search */}
+        <FilterBar search={search} setSearch={setSearch} />
+
+        {/* Tombol notifikasi */}
         <button
-          onClick={handleClickSecureBank}
-          style={{
-            position: "absolute",
-            top: "20px",
-            right: "0px", // geser sedikit biar tombol nggak overlap
-            padding: "8px 16px",
-            backgroundColor: "#2563EB",
-            color: "white",
-            border: "none",
-            borderRadius: "4px",
-            cursor: "pointer",
-            fontWeight: "bold",
-          }}
+          onClick={triggerNotification}
+          className="mb-6 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
         >
-          SecureBank
+          Trigger Notifikasi
         </button>
 
-        <button
-          onClick={handleClickFlexiCrack}
-          style={{
-            position: "absolute",
-            top: "20px",
-            right: "100px",
-            padding: "8px 16px",
-            backgroundColor: "#DC2626",
-            color: "white",
-            border: "none",
-            borderRadius: "6px",
-            cursor: "pointer",
-            fontWeight: "bold",
-            display: "flex",
-            alignItems: "center",
-            gap: "8px",
-            boxShadow: "0 2px 8px rgba(0, 0, 0, 0.3)",
-          }}
-        >
-          <FaBug /> FlexiCrack
-        </button>
+        {/* Data Table */}
+        <DataTable data={sampleData} search={search} onRowClick={handleRowClick} />
 
-        <h1>Dashboard Content</h1>
-        <p>Konten utama halaman dashboard di sini.</p>
+        {/* Grafik */}
+        <div className="mt-12">
+          <h2 className="text-2xl font-semibold mb-4 text-gray-700">
+            Grafik Aktivitas Bulanan
+          </h2>
+          <ChartSection />
+        </div>
 
-        <button onClick={handleClickNote1}>Klik Aku</button>
-      </main>
+        {/* Notifikasi */}
+        {notification && (
+          <Notification message={notification} onClose={() => setNotification(null)} />
+        )}
+
+        {/* Modal Detail */}
+        <Modal isOpen={modalOpen} onClose={() => setModalOpen(false)} title={selectedItem?.name || ''}>
+          <p className="text-gray-700">{selectedItem?.description}</p>
+          <p className="mt-2 font-semibold">Status: {selectedItem?.status}</p>
+        </Modal>
+      </LayoutWrapper>
     </div>
   );
 };
