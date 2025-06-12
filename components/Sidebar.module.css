@@ -20,20 +20,60 @@
 }
 
 .toggleBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   background: none;
   border: none;
-  color: white;
-  font-size: 20px;
-  padding: 10px 15px;
   cursor: pointer;
-  align-self: flex-end;
+  padding: 10px 15px;
+  color: white;
   user-select: none;
+  font-size: 18px;
   transition: color 0.3s ease;
 }
 
 .toggleBtn:hover {
   color: #f87171; /* merah muda saat hover tombol toggle */
 }
+
+.arrow {
+  font-size: 24px;
+  font-weight: bold;
+  user-select: none;
+}
+.flexitubeLabel {
+  font-size: 18px;
+  background-color: #DC2626;
+  padding: 4px 12px;
+  border-radius: 8px;
+  font-weight: bold;
+  color: white;
+  user-select: none;
+  white-space: nowrap;
+  position: relative;
+  overflow: hidden;
+}
+
+.flexitubeLabel {
+  font-size: 18px;
+  background-color: #DC2626;
+  padding: 4px 12px;
+  border-radius: 8px;
+  font-weight: bold;
+  color: white;
+  user-select: none;
+  white-space: nowrap;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.flexitubeLabel:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 15px rgba(220, 38, 38, 0.7);
+}
+
+
+/* Nav styles */
 
 .nav ul {
   list-style: none;
@@ -60,42 +100,30 @@
 }
 
 .nav a {
-  color: inherit; /* ikuti warna li */
+  color: inherit;
   text-decoration: none;
   display: block;
   transition: opacity 0.3s ease;
 }
 
-/* Saat sidebar collapse, sembunyikan teks link dengan animasi */
+/* Collapse nav link texts */
 .collapsed .nav li a {
   opacity: 0;
   pointer-events: none;
   text-indent: -9999px;
   height: 20px;
   overflow: hidden;
-  transition: opacity 0.3s ease 0.2s; /* delay supaya fade */
+  transition: opacity 0.3s ease 0.2s;
 }
 
-/* Saat sidebar collapse, buat li clickable hanya ikon */
+/* Make nav items center aligned and no padding when collapsed */
 .collapsed .nav li {
   text-align: center;
   padding-left: 0;
   padding-right: 0;
 }
 
-/* Kalau ingin tambahkan icon, bisa styling di sini */
-.nav li svg {
-  vertical-align: middle;
-  margin-right: 10px;
-  transition: margin 0.3s ease;
-}
-
-/* Saat collapse, kecilkan margin icon */
-.collapsed .nav li svg {
-  margin-right: 0;
-}
-
-/* Tooltip sederhana (optional) */
+/* Optional: tooltip on collapsed nav items */
 .collapsed .nav li:hover::after {
   content: attr(data-tooltip);
   position: fixed;
@@ -114,7 +142,6 @@
   z-index: 1100;
 }
 
-/* Sembunyikan tooltip saat tidak hover */
 .collapsed .nav li::after {
   opacity: 0;
   pointer-events: none;

@@ -14,11 +14,14 @@ const LayoutWrapper: React.FC<LayoutWrapperProps> = ({ collapsed = false, childr
     <main
       style={{
         marginLeft,
-        padding: '20px',
-        position: 'relative',
         transition: 'margin-left 0.3s ease',
-        minHeight: '100vh',
-        backgroundColor: '#F9FAFB' // sama seperti Tailwind bg-gray-50
+        padding: '24px',
+        backgroundColor: 'white',
+        borderRadius: '12px',
+        boxShadow: '0 10px 25px rgba(0, 0, 0, 0.1)',
+        minHeight: '90vh',
+        marginTop: '24px',
+        marginBottom: '24px',
       }}
     >
       {children}

@@ -1,5 +1,3 @@
-import Link from "next/link";
-import clsx from 'clsx';
 import React from "react";
 import styles from "./Sidebar.module.css";
 
@@ -11,37 +9,40 @@ type SidebarProps = {
 const Sidebar: React.FC<SidebarProps> = ({ collapsed, toggleSidebar }) => {
   return (
     <div className={`${styles.sidebar} ${collapsed ? styles.collapsed : ""}`}>
-
       <button
         className={styles.toggleBtn}
         onClick={toggleSidebar}
         aria-label="Toggle Sidebar"
       >
-        {collapsed ? "→" : "←"}
+        {collapsed ? (
+          <span className={styles.arrow}>→</span> // Panah muncul kalau collapsed
+        ) : (
+          <span className={styles.flexitubeLabel}>FlexiTUBE</span> // Flexitube muncul kalau open
+        )}
       </button>
 
       <nav className={styles.nav}>
         <ul>
-          <li data-tooltip="Notes 1">
-            <Link href="/notes1">SQL Injection</Link>
+          <li data-tooltip="SQL Injection">
+            <a href="/notes1">SQL Injection</a>
           </li>
-           <li data-tooltip="Notes 1">
-            <Link href="/notes1">Brute Force</Link>
+          <li data-tooltip="Brute Force">
+            <a href="/notes1">Brute Force</a>
           </li>
-           <li data-tooltip="Notes 1">
-            <Link href="/notes1">XSS</Link>
+          <li data-tooltip="XSS">
+            <a href="/notes1">XSS</a>
           </li>
-          <li data-tooltip="/directory mtraversal">
-            <Link href="/directory-traversal">Directory Traversal</Link>
+          <li data-tooltip="Directory Traversal">
+            <a href="/directory-traversal">Directory Traversal</a>
           </li>
-          <li data-tooltip="Admin">
-            <Link href="/Admin">Admin root</Link>
+          <li data-tooltip="Admin root">
+            <a href="/Admin">Admin root</a>
           </li>
-          <li data-tooltip="Analisis">
-            <Link href="/Analisis">Analisis Data </Link>
+          <li data-tooltip="Analisis Data">
+            <a href="/Analisis">Analisis Data</a>
           </li>
           <li data-tooltip="Sidebar 1">
-            <Link href="/inisidebar1">Sidebar 1</Link>
+            <a href="/inisidebar1">Sidebar 1</a>
           </li>
         </ul>
       </nav>

@@ -1,4 +1,10 @@
 /* globals.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Style custom kamu di bawah sini */
+
 
 /* Container utama */
 .page-container {
