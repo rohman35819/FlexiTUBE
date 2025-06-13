@@ -1,10 +1,41 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8">
   <title>WebSocket XSS Simulation</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 20px;
+      background: #111;
+      color: #eee;
+    }
+    #chat {
+      border: 1px solid #444;
+      padding: 10px;
+      margin-top: 10px;
+      height: 200px;
+      overflow-y: scroll;
+      background: #222;
+    }
+    input {
+      padding: 5px;
+      width: 300px;
+      background: #333;
+      color: white;
+      border: 1px solid #555;
+    }
+    button {
+      padding: 5px 10px;
+      background: #555;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+  </style>
 </head>
 <body>
-  <h1>Chat</h1>
+  <h1>💬 WebSocket Chat</h1>
   <input id="msg" placeholder="Type message..." />
   <button onclick="send()">Send</button>
   <div id="chat"></div>
@@ -15,14 +46,30 @@
 
     ws.onmessage = (event) => {
       const msgDiv = document.createElement("div");
-      msgDiv.innerHTML = event.data; // raw innerHTML (sengaja vulnerable)
+      msgDiv.innerHTML = event.data; // SENGAJA RAW untuk simulasi XSS
       chat.appendChild(msgDiv);
+
+      // Kalau server mendeteksi XSS dan mengirimkan warning
+      if (event.data.includes("XSS detected")) {
+        alert("⚠️ Koneksi diputus oleh server karena payload XSS!");
+      }
+    };
+
+    ws.onclose = () => {
+      const msg = document.createElement("div");
+      msg.textContent = "❌ Koneksi WebSocket ditutup.";
+      msg.style.color = "red";
+      chat.appendChild(msg);
     };
 
     function send() {
       const input = document.getElementById("msg");
-      ws.send(input.value);
-      input.value = '';
+      if (ws.readyState === WebSocket.OPEN) {
+        ws.send(input.value);
+        input.value = '';
+      } else {
+        alert("WebSocket tidak terhubung.");
+      }
     }
   </script>
 </body>
