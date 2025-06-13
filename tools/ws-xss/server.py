@@ -1,37 +1,41 @@
 import asyncio
 import websockets
-import re
+import html
 
-# Deteksi sederhana payload XSS
-def is_xss(payload):
-    patterns = [
-        r"<img[^>]+onerror\s*=",
-        r"<script.*?>",
-        r"on\w+\s*=",         # event handler seperti onclick=
-        r"alert\s*\(",
-        r"javascript:"
-    ]
-    return any(re.search(p, payload, re.IGNORECASE) for p in patterns)
+clients = set()
 
-async def handle_client(websocket, path):
+def is_xss(payload: str) -> bool:
+    xss_signatures = ["<script", "onerror", "onload", "alert", "src=", "`", "&#"]
+    return any(sig.lower() in payload.lower() for sig in xss_signatures)
+
+async def handler(websocket, path):
+    clients.add(websocket)
     print("New client connected.")
+
     try:
         async for message in websocket:
             print(f"Received: {message}")
 
             if is_xss(message):
-                warning = "⚠️ XSS detected. Connection closed."
+                warning = "⚠ XSS detected. Connection closed."
                 print(warning)
-                await websocket.send(warning)
+                await websocket.send("🚫 XSS detected! Connection will be closed.")
                 await websocket.close()
                 break
-
-            await websocket.send(message)  # echo back (atau broadcast ke client lain nanti)
+            else:
+                # Broadcast ke semua client yang masih aktif
+                safe_message = html.escape(message)
+                for client in clients:
+                    if client.open:
+                        await client.send(message)
 
     except websockets.exceptions.ConnectionClosed:
         print("Client disconnected.")
+    finally:
+        clients.remove(websocket)
 
-start_server = websockets.serve(handle_client, "localhost", 8765)
 print("WebSocket server running on ws://localhost:8765")
+start_server = websockets.serve(handler, "localhost", 8765)
+
 asyncio.get_event_loop().run_until_complete(start_server)
 asyncio.get_event_loop().run_forever()
