@@ -29,8 +29,8 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed, toggleSidebar }) => {
           <li data-tooltip="Brute Force">
             <a href="/notes1">Brute Force</a>
           </li>
-          <li data-tooltip="XSS">
-            <a href="/notes1">XSS</a>
+          <li data-tooltip="WS-XSS">
+            <a  href="/ws-xss/client.html" target="_blank">XSS</a>
           </li>
           <li data-tooltip="Directory Traversal">
             <a href="/directory-traversal">Directory Traversal</a>

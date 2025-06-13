@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>WebSocket XSS Simulation</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f0f0f0;
+      padding: 20px;
+    }
+    #chat {
+      border: 1px solid #ccc;
+      background: #fff;
+      padding: 10px;
+      height: 300px;
+      overflow-y: scroll;
+      margin-bottom: 10px;
+    }
+    input {
+      padding: 8px;
+      width: 300px;
+    }
+    button {
+      padding: 8px 12px;
+    }
+  </style>
+</head>
+<body>
+  <h2>💬 WebSocket Chat (XSS Simulation)</h2>
+  <div id="chat"></div>
+  <input id="msg" placeholder="Type your message..." />
+  <button onclick="send()">Send</button>
+
+  <script>
+    const ws = new WebSocket("ws://localhost:8765");
+    const chat = document.getElementById("chat");
+
+    ws.onmessage = (event) => {
+      const msgDiv = document.createElement("div");
+      msgDiv.innerHTML = event.data; // Rawan XSS - simulasi celah nyata
+      chat.appendChild(msgDiv);
+      chat.scrollTop = chat.scrollHeight;
+    };
+
+    ws.onclose = () => {
+      const msgDiv = document.createElement("div");
+      msgDiv.style.color = "red";
+      msgDiv.textContent = "⚠ Connection closed.";
+      chat.appendChild(msgDiv);
+    };
+
+    function send() {
+      const input = document.getElementById("msg");
+      if (ws.readyState === WebSocket.OPEN) {
+        ws.send(input.value);
+        input.value = '';
+      }
+    }
+  </script>
+</body>
+</html>
