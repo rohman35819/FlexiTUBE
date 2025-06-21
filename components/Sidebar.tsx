@@ -29,8 +29,8 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed, toggleSidebar }) => {
           <li data-tooltip="Brute Force">
             <a href="/notes1">Brute Force</a>
           </li>
-          <li data-tooltip="WS-XSS">
-            <a  href="/ws-xss/client.html" target="_blank">XSS</a>
+          <li data-tooltip="XSS">
+            <a  href="/xss">XSS</a>
           </li>
           <li data-tooltip="Directory Traversal">
             <a href="/directory-traversal">Directory Traversal</a>
@@ -41,9 +41,16 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed, toggleSidebar }) => {
           <li data-tooltip="Analisis Data">
             <a href="/Analisis">Analisis Data</a>
           </li>
-          <li data-tooltip="Sidebar 1">
-            <a href="/inisidebar1">Sidebar 1</a>
-          </li>
+          <li data-tooltip="login">
+  <a
+    href="http://localhost:3000/reqreslogin/index.html"
+    target="_blank"
+    rel="noopener noreferrer"
+  >
+    reqres-login API-KEY
+  </a>
+</li>
+
         </ul>
       </nav>
     </div>

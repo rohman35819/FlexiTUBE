@@ -14,3 +14,5 @@ yarn dev
 pnpm dev
 # or
 bun dev
+
+git pull origin main

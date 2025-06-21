@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Simulasi Login - ReqRes</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 100px;
+    }
+
+    form {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+      width: 300px;
+    }
+
+    input {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    button {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      padding: 10px;
+      width: 100%;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    #result {
+      margin-top: 20px;
+      color: green;
+    }
+  </style>
+</head>
+<body>
+
+  <form id="loginForm">
+    <h3>Login ReqRes API</h3>
+    <input type="email" name="email" placeholder="Email" value="eve.holt@reqres.in" required />
+    <input type="password" name="password" placeholder="Password" value="cityslicka" required />
+    <button type="submit">Login</button>
+  </form>
+
+  <div id="result"></div>
+
+  <script>
+    const form = document.getElementById('loginForm');
+    const result = document.getElementById('result');
+
+    form.addEventListener('submit', async function (e) {
+      e.preventDefault();
+
+      const email = form.email.value;
+      const password = form.password.value;
+
+      try {
+        const res = await fetch('https://reqres.in/api/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-api-key': 'reqres-free-v1'
+          },
+          body: JSON.stringify({ email, password })
+        });
+
+        const data = await res.json();
+        if (res.ok) {
+          result.innerText = '✅ Login berhasil! Token: ' + data.token;
+        } else {
+          result.innerText = '❌ Gagal login: ' + data.error;
+        }
+        console.log(data);
+      } catch (err) {
+        result.innerText = '⚠️ Terjadi kesalahan.';
+        console.error(err);
+      }
+    });
+  </script>
+
+</body>
+</html>
