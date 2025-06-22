@@ -5,23 +5,10 @@ import Sidebar from '../../components/Sidebar';
 import DashboardButtons from '../../components/DashboardButtons';
 import LayoutWrapper from '../../components/LayoutWrapper';
 import FilterBar from '../../components/FilterBar';
-import DataTable from '../../components/DataTable'; // Versi khusus: id, name, status
-import ChartSection from '../../components/ChartSection';
 import Notification from '../../components/Notification';
-import Modal from '../../components/Modal';
+
 import { Item } from '@/lib/types';
-
-
-
-const sampleData: Item[] = [
-  { id: 1, name: 'Device A', status: 'Active', description: 'Detail Device A ...' },
-  { id: 2, name: 'Device B', status: 'Inactive', description: 'Detail Device B ...' },
-  { id: 3, name: 'Device C', status: 'Active', description: 'Detail Device C ...' },
-  { id: 4, name: 'Device D', status: 'Maintenance', description: 'Detail Device D ...' },
-  { id: 5, name: 'Device E', status: 'Inactive', description: 'Detail Device E ...' },
-  { id: 6, name: 'Device F', status: 'Active', description: 'Detail Device F ...' },
-  { id: 7, name: 'Device G', status: 'Active', description: 'Detail Device G ...' },
-];
+import Link from 'next/link';
 
 const Dashboard: React.FC = () => {
   const [collapsed, setCollapsed] = useState(false);
@@ -59,27 +46,27 @@ const Dashboard: React.FC = () => {
           Trigger Notifikasi
         </button>
 
-        {/* Tabel Data */}
-        <DataTable data={sampleData} search={search} onRowClick={handleRowClick} />
-
-        {/* Grafik */}
-        <div className="mt-12">
-          <h2 className="text-2xl font-semibold mb-4 text-gray-700">
-            Grafik Aktivitas Bulanan
-          </h2>
-          <ChartSection />
-        </div>
-
         {/* Notifikasi */}
         {notification && (
           <Notification message={notification} onClose={() => setNotification(null)} />
         )}
 
-        {/* Modal Detail */}
-        <Modal isOpen={modalOpen} onClose={() => setModalOpen(false)} title={selectedItem?.name || ''}>
-          <p className="text-gray-700">{selectedItem?.description}</p>
-          <p className="mt-2 font-semibold">Status: {selectedItem?.status}</p>
-        </Modal>
+        {/* Menu Simulasi Timing Attack */}
+        <div className="mt-6">
+          <h2 className="text-lg font-semibold mb-2">Simulasi Pentest</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <Link href="/web-timing-attack">
+              <div className="p-4 bg-gray-100 hover:bg-gray-200 rounded-lg shadow cursor-pointer transition-all">
+                <h3 className="text-md font-bold text-blue-600">🕒 Web Timing Attack</h3>
+                <p className="text-sm text-gray-600">
+                  Uji delay berbasis input (username/password) untuk latihan bug bounty.
+                </p>
+              </div>
+            </Link>
+
+            {/* Tambahkan simulasi lain di sini nanti */}
+          </div>
+        </div>
       </LayoutWrapper>
     </div>
   );
