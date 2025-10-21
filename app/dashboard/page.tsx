@@ -55,7 +55,7 @@ const Dashboard: React.FC = () => {
         <div className="mt-6">
           <h2 className="text-lg font-semibold mb-2">Simulasi Pentest</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <Link href="/web-timing-attack">
+            <Link href="/web-timing-attack" className="group">
               <div className="p-4 bg-gray-100 hover:bg-gray-200 rounded-lg shadow cursor-pointer transition-all">
                 <h3 className="text-md font-bold text-blue-600">🕒 Web Timing Attack</h3>
                 <p className="text-sm text-gray-600">
@@ -67,6 +67,45 @@ const Dashboard: React.FC = () => {
             {/* Tambahkan simulasi lain di sini nanti */}
           </div>
         </div>
+
+        {/* Artikel / Tutorial Shortcut */}
+        <div className="mt-8">
+          <h2 className="text-lg font-semibold mb-3">Artikel & Tutorial</h2>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {/* Card artikel: Fungsi di Python */}
+            <Link href="/dashboard/python-fungsi" className="group">
+              <article className="p-4 bg-white border rounded-lg shadow-sm hover:shadow md:hover:scale-[1.01] transition transform cursor-pointer">
+                <h3 className="text-md font-bold text-gray-800 group-hover:text-blue-600">
+                  Fungsi di Python
+                </h3>
+                <p className="text-sm text-gray-600 mt-1">
+                  Pengantar fungsi di Python: definisi, parameter, return, dan contoh sederhana.
+                </p>
+
+                <div className="mt-3 flex items-center justify-between">
+                  <span className="text-xs text-gray-500">Bacaan singkat</span>
+                  <span className="text-xs text-gray-400">▶</span>
+                </div>
+              </article>
+            </Link>
+
+            {/* Tombol kecil untuk langsung membuka halaman */}
+            <div className="p-4 flex items-center justify-between bg-gray-50 border rounded-lg">
+              <div>
+                <div className="text-sm font-semibold">Butuh cepat baca?</div>
+                <div className="text-xs text-gray-500">Buka artikel ringkasan</div>
+              </div>
+
+              <Link href="/dashboard/python-fungsi">
+                <button className="px-3 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition">
+                  Baca: Fungsi
+                </button>
+              </Link>
+            </div>
+          </div>
+        </div>
+
       </LayoutWrapper>
     </div>
   );
