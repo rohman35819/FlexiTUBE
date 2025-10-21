@@ -97,7 +97,7 @@ const Dashboard: React.FC = () => {
                 <div className="text-xs text-gray-500">Buka artikel ringkasan</div>
               </div>
 
-              <Link href="/dashboard/python-fungsi">
+              <Link href="/python_fungsi">
                 <button className="px-3 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition">
                   Baca: Fungsi
                 </button>

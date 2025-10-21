@@ -16,3 +16,8 @@ pnpm dev
 bun dev
 
 git pull origin main
+
+
+
+UNTUK MENJALANKAN DI LOKAL
+Jalankan dev server: npm run dev → buka http://localhost:3000/dashboard → klik card.
