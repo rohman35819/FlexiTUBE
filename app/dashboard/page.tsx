@@ -74,7 +74,7 @@ const Dashboard: React.FC = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Card artikel: Fungsi di Python */}
-            <Link href="/dashboard/python-fungsi" className="group">
+            <Link href="/python_fungsi" className="group">
               <article className="p-4 bg-white border rounded-lg shadow-sm hover:shadow md:hover:scale-[1.01] transition transform cursor-pointer">
                 <h3 className="text-md font-bold text-gray-800 group-hover:text-blue-600">
                   Fungsi di Python
