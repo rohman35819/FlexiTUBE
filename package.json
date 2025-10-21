@@ -3,13 +3,13 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "postbuild": "next-sitemap",
-    "dev": "next dev --turbopack",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint",
-    "lint:css": "stylelint '**/*.{css,scss}'"
-  },
+  "dev": "next dev --turbopack",
+  "build": "next build && next export",
+  "start": "next start",
+  "postbuild": "next-sitemap",
+  "lint": "next lint",
+  "lint:css": "stylelint '**/*.{css,scss}'"
+},
   "dependencies": {
     "@supabase/supabase-js": "^2.49.8",
     "clsx": "^2.1.1",

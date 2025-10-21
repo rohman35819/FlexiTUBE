@@ -3,8 +3,8 @@
 
 import React from 'react';
 import LayoutWrapper from '../../components/LayoutWrapper'; // relatif dari app/Analisis
-import ChartSection from '../../components/ChartSection'; // Aktifkan kalau kamu pakai grafik
-import DataTable from '../../components/DataTable'; // Jika kamu punya komponen tabel
+
+
 const dummyData = [
   { id: 1, sourceIP: '192.168.0.100', attack: 'Brute Force', time: '2025-06-08 10:30' },
   { id: 2, sourceIP: '10.10.10.20', attack: 'SQL Injection', time: '2025-06-08 11:12' },

@@ -1,10 +1,10 @@
-// next.config.js
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: 'export', // Wajib untuk static export
+  output: 'export', // wajib untuk static
   images: {
-    unoptimized: true, // ← WAJIB ditambahkan untuk mencegah error Image Optimization
+    unoptimized: true, // cegah error Image Optimization
   },
+  trailingSlash: true, // optional tapi bantu file HTML dikenali di Netlify
 };
 
 module.exports = nextConfig;
